@@ -1,24 +1,24 @@
-from flask.app import Flask
-from flask.templating import render_template
-from flask_socketio import SocketIO, emit, send
+from flask import Flask, render_template
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-io = SocketIO(app)
+socketio = SocketIO(app)
 
-messages = []
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+@socketio.on('connect')
+def handle_connect():
+    emit('connected', {'data': 'Connected'})
 
-@io.on('sendMessage')
-def send_message_handler(msg):
-    messages.append(msg)
-    emit('getMessage', msg, broadcast=True)
+@socketio.on('disconnect')
+def handle_disconnect():
+    emit('disconnected', {'data': 'Disconnected'})
 
-@io.on('message')
-def message_handler(msg):
-    send(messages)
+@socketio.on('message')
+def handle_message(message):
+    emit('message', {'data': message['data']}, broadcast=True)
 
-if __name__ == "__main__":
-    io.run(app, host='0.0.0.0', port=5000, debug=True)
+if __name__ == '__main__':
+    socketio.run(app, host='0.0.0.0', port=5000)
