@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 from threading import Thread
-import os 
+import os
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -9,12 +9,11 @@ socketio = SocketIO(app)
 users = {}
 
 def handle_connect(sid):
-    users[sid] = Thread(target=user_thread, args=(sid,))
-    users[sid].start()
+    users[sid] = True
 
 def user_thread(sid):
-    while True:
-        message = socketio.wait(sid)
+    while users.get(sid, False):
+        message = socketio.get_session(sid).receive()
         if message is None:
             break
         else:
@@ -26,15 +25,15 @@ def index():
 
 @socketio.on('connect')
 def handle_connect_event():
-    sid = socketio.eio_sid_map[request.namespace][request.sid]
-    thread = Thread(target=handle_connect, args=(sid,))
+    sid = request.sid
+    users[sid] = True
+    thread = Thread(target=user_thread, args=(sid,))
     thread.start()
 
 @socketio.on('disconnect')
 def handle_disconnect_event():
-    sid = socketio.eio_sid_map[request.namespace][request.sid]
-    if sid in users:
-        del users[sid]
+    sid = request.sid
+    users.pop(sid, None)
 
 @socketio.on('message')
 def handle_message(message):
