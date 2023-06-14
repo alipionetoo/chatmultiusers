@@ -3,32 +3,69 @@
 <html>
 <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
-    <script>
-        const socket = io('https://chat-multi-users.onrender.com', { transports: ['websocket'] });
-        const name = prompt('Qual seu nome?');
-        function sendMessage() {
-            if (document.getElementById('message').value)
-            {
-                const mensagem = name + ': ' + document.getElementById('message').value;
-                const p = document.createElement('p');
-                p.innerHTML = mensagem;
-                document.getElementById('messages').appendChild(p);
-                socket.emit('message', mensagem);
-                document.getElementById('message').value = '';
-                
-            }
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
         }
-        socket.on('broadcast', function (message) {
+            h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #messages {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 10px;
+        max-height: 400px;
+        overflow-y: scroll;
+        margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+        width: 80%;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+<script>
+    const socket = io('http://localhost:5000', { transports: ['websocket'] });
+    const name = prompt('Qual seu nome?');
+    function sendMessage() {
+        if (document.getElementById('message').value) {
+            const mensagem = name + ': ' + document.getElementById('message').value;
             const p = document.createElement('p');
-            p.innerHTML = message;
+            p.innerHTML = mensagem;
             document.getElementById('messages').appendChild(p);
-        });
-    </script>
+            socket.emit('message', mensagem);
+            document.getElementById('message').value = '';
+        }
+    }
+    socket.on('broadcast', function (message) {
+        const p = document.createElement('p');
+        p.innerHTML = message;
+        document.getElementById('messages').appendChild(p);
+    });
+</script>
 </head>
 <body>
     <h1>Chat Multi Usuário</h1>
     <div id="messages"></div>
-    <input type="text" id="message" />
-    <button onclick="sendMessage()">Enviar</button>   
+    <input type="text" id="message" placeholder="Digite sua mensagem..." />
+    <button onclick="sendMessage()">Enviar</button>
 </body>
 </html>
