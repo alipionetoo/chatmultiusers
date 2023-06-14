@@ -42,7 +42,7 @@
             background-color: #45a049;
         }
 
-        /* Responsive Styles */
+        /* Estilos Responsivos */
 
         @media (max-width: 768px) {
             input[type="text"], button {
@@ -51,12 +51,27 @@
         }
     </style>
     <script>
-        const socket = io('https://chat-multi-users.onrender.com', { transports: ['websocket'] });
-        const name = prompt('Qual seu nome?');
+        const socket = io('https://chat-multi-users.onrender.com/', { transports: ['websocket'] });
+        let name = '';
+
+        function login() {
+            name = document.getElementById('name').value;
+            document.getElementById('nameForm').style.display = 'none';
+            document.getElementById('chatForm').style.display = 'block';
+        }
+
+        function getCurrentTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const time = hours + ':' + minutes;
+            return time;
+        }
 
         function sendMessage() {
             if (document.getElementById('message').value) {
-                const mensagem = name + ': ' + document.getElementById('message').value;
+                const time = getCurrentTime();
+                const mensagem = name + ' (' + time + '): ' + document.getElementById('message').value;
                 const p = document.createElement('p');
                 p.innerHTML = mensagem;
                 document.getElementById('messages').appendChild(p);
@@ -74,8 +89,15 @@
 </head>
 <body>
     <h1>Chat Multi Usuário</h1>
-    <div id="messages"></div>
-    <input type="text" id="message" placeholder="Digite sua mensagem..." />
-    <button onclick="sendMessage()">Enviar</button>
+    <div id="nameForm">
+        <label for="name">Digite seu nome:</label>
+        <input type="text" id="name" />
+        <button onclick="login()">Entrar</button>
+    </div>
+    <div id="chatForm" style="display: none;">
+        <div id="messages"></div>
+        <input type="text" id="message" placeholder="Digite sua mensagem..." />
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
 </body>
 </html>
