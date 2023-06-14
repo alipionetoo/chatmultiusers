@@ -26,9 +26,6 @@ def index():
 
 @socketio.on('connect')
 def handle_connect_event():
-    sid = request.sid
-    print(sid)
-    handle_connect(sid)
     emit('connected', {'data': 'Connected'})
 
 @socketio.on('disconnect')
