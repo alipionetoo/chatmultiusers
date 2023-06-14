@@ -26,11 +26,15 @@ def index():
 
 @socketio.on('connect')
 def handle_connect_event():
-    emit('connected', {'data': 'Connected'})
+    sid = socketio.eio_sid_map[request.namespace][request.sid]
+    thread = Thread(target=handle_connect, args=(sid,))
+    thread.start()
 
 @socketio.on('disconnect')
 def handle_disconnect_event():
-    emit('disconnected', {'data': 'Disconnected'})
+    sid = socketio.eio_sid_map[request.namespace][request.sid]
+    if sid in users:
+        del users[sid]
 
 @socketio.on('message')
 def handle_message(message):
