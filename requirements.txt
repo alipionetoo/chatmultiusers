@@ -3,4 +3,4 @@ flask-socketio
 gunicorn
 simple-websocket
 
-evenlet==0.30.2
+eventlet==0.33.0
