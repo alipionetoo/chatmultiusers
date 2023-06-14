@@ -43,7 +43,7 @@
     }
 </style>
 <script>
-    const socket = io('http://localhost:5000', { transports: ['websocket'] });
+    const socket = io('https://chat-multi-users.onrender.com', { transports: ['websocket'] });
     const name = prompt('Qual seu nome?');
     function sendMessage() {
         if (document.getElementById('message').value) {
