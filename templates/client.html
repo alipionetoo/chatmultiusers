@@ -8,10 +8,106 @@
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="styles.css"> <!-- Importação do arquivo de estilos CSS -->
-
 <!-- Importação do Socket.IO -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+
+<!-- Estilos CSS -->
+<style>
+    /* Estilos para o corpo do documento */
+    body {
+        font-family: 'M PLUS Rounded 1c', Arial, sans-serif; /* Define a fonte para 'M PLUS Rounded 1c', Arial, sans-serif */
+        background-color: #111; /* Define a cor de fundo como preta (#111) */
+        padding: 20px; /* Define um espaçamento de 20 pixels em torno do corpo do documento */
+    }
+
+    /* Estilos para os títulos */
+    h1 {
+        text-align: center; /* Centraliza o texto */
+        margin-bottom: 20px; /* Define uma margem inferior de 20 pixels */
+        color: #84f; /* Define a cor do texto como azul claro (#84f) */
+        font-family: 'M PLUS Rounded 1c', sans-serif; /* Define a fonte para 'M PLUS Rounded 1c', sans-serif */
+        font-weight: 700; /* Define o peso da fonte como negrito (700) */
+        font-size: 3rem; /* Define o tamanho da fonte como 3 rem */
+    }
+
+    /* Estilos para as etiquetas */
+    label {
+        justify-self: center; /* Centraliza horizontalmente */
+        color: #84f; /* Define a cor do texto como azul claro (#84f) */
+        font-size: 1.2rem; /* Define o tamanho da fonte como 1.2 rem */
+        font-family: 'M PLUS Rounded 1c', sans-serif; /* Define a fonte para 'M PLUS Rounded 1c', sans-serif */
+    }
+
+    /* Estilos para a área de mensagens */
+    #messages {
+        width: 80vw; /* Define a largura como 80% da largura da viewport */
+        background-color: #333; /* Define a cor de fundo como cinza escuro (#333) */
+        border-radius: 8px; /* Define um raio de borda de 8 pixels */
+        padding: 10px; /* Define um espaçamento interno de 10 pixels */
+        max-height: 400px; /* Define a altura máxima como 400 pixels */
+        margin-bottom: 20px; /* Define uma margem inferior de 20 pixels */
+        overflow-y: scroll; /* Habilita a rolagem vertical */
+    }
+
+    /* Estilos para o formulário de nome */
+    #nameForm {
+        display: grid; /* Define o layout como grid */
+        justify-items: center; /* Centraliza os itens horizontalmente */
+        gap: 1rem; /* Define um espaçamento de 1 rem entre os itens */
+    }
+
+    /* Estilos para o formulário de chat */
+    #chatForm {
+        justify-items: center; /* Centraliza os itens horizontalmente */
+        gap: 1rem; /* Define um espaçamento de 1 rem entre os itens */
+    }
+
+    /* Estilos para o campo de nome */
+    #name {
+        width: 300px; /* Define a largura como 300 pixels */
+        padding: 10px; /* Define um espaçamento interno de 10 pixels */
+        font-size: 16px; /* Define o tamanho da fonte como 16 pixels */
+    }
+
+    /* Estilos para campos de texto */
+    input[type="text"] {
+        width: 80vw; /* Define a largura como 80% da largura da viewport */
+        padding: 10px; /* Define um espaçamento interno de 10 pixels */
+        font-size: 16px; /* Define o tamanho da fonte como 16 pixels */
+        background-color: #333; /* Define a cor de fundo como cinza escuro (#333) */
+        color: #fff; /* Define a cor do texto como branco (#fff) */
+        border-radius: 8px; /* Define um raio de borda de 8 pixels */
+        margin-bottom: 20px; /* Define uma margem inferior de 20 pixels */
+        border: none; /* Remove a borda */
+    }
+
+    /* Estilos para botões */
+    button {
+        display: block; /* Define como bloco */
+        justify-self: center; /* Centraliza horizontalmente */
+        border-radius: 4px; /* Define um raio de borda de 4 pixels */
+        padding: 10px 20px; /* Define um espaçamento interno de 10 pixels na vertical e 20 pixels na horizontal */
+        font-size: 16px; /* Define o tamanho da fonte como 16 pixels */
+        background-color: #84f; /* Define a cor de fundo como azul claro (#84f) */
+        color: #fff; /* Define a cor do texto como branco (#fff) */
+        border: none; /* Remove a borda */
+        cursor: pointer; /* Altera o cursor do mouse para um ponteiro */
+    }
+
+    /* Estilos para o botão ao passar o mouse */
+    button:hover {
+        background-color: #84c; /* Define a cor de fundo como azul médio (#84c) */
+    }
+
+    /* Estilos responsivos para telas menores */
+    @media (max-width: 768px) {
+
+        input[type="text"],
+        button {
+            width: 100%; /* Define a largura como 100% da largura da viewport */
+        }
+    }
+</style>
 
 <!-- Scripts JavaScript -->
 <script>
@@ -114,4 +210,4 @@
     <button onclick="sendMessage()" , onkeydown="sendMessage()">Enviar</button> <!-- Botão para enviar a mensagem -->
 </div>
 </body>
-</html>
+</html> 
