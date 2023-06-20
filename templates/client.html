@@ -121,19 +121,19 @@
     
     let name = ''; // Variável para armazenar o nome do usuário
 
-    // Função para gerar uma cor aleatória em hexadecimal
-    function getRandomColor() { //
-        const letters = '0123456789ABCDEF'; // Define as letras possíveis
+    // Função para gerar uma cor aleatória clara em hexadecimal
+    function getRandomColor() {
+        const letters = 'ABCDEF';
         let color = '#';
         for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
+            color += letters[Math.floor(Math.random() * letters.length)];
         }
-        return color; // Retorna a cor gerada
+        return color;
     }
 
     // Função para definir a cor do usuário
     function setUserColor() {
-        const userColor = getRandomColor(); // Obtém uma cor aleatória
+        const userColor = getRandomColor();
         document.documentElement.style.setProperty('--user-color', userColor);
     }
 
