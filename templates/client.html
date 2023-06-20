@@ -42,16 +42,12 @@
     #messages {
         width: 80vw; /* Define a largura como 80% da largura da viewport */
         background-color: #333; /* Define a cor de fundo como cinza escuro (#333) */
+        color: #fff; /* Define a cor do texto como branco (#fff) */
         border-radius: 8px; /* Define um raio de borda de 8 pixels */
         padding: 10px; /* Define um espaçamento interno de 10 pixels */
         max-height: 400px; /* Define a altura máxima como 400 pixels */
         margin-bottom: 20px; /* Define uma margem inferior de 20 pixels */
         overflow-y: scroll; /* Habilita a rolagem vertical */
-    }
-
-    /* Estilos para o texto do usuário */
-    #messages p.user {
-        color: var(--user-color);
     }
 
     /* Estilos para o formulário de nome */
@@ -94,7 +90,6 @@
         padding: 10px 20px; /* Define um espaçamento interno de 10 pixels na vertical e 20 pixels na horizontal */
         font-size: 16px; /* Define o tamanho da fonte como 16 pixels */
         background-color: #84f; /* Define a cor de fundo como azul claro (#84f) */
-        color: #fff; /* Define a cor do texto como branco (#fff) */
         border: none; /* Remove a borda */
         cursor: pointer; /* Altera o cursor do mouse para um ponteiro */
     }
@@ -121,26 +116,9 @@
     
     let name = ''; // Variável para armazenar o nome do usuário
 
-    // Função para gerar uma cor aleatória clara em hexadecimal
-    function getRandomColor() {
-        const letters = 'ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * letters.length)];
-        }
-        return color;
-    }
-
-    // Função para definir a cor do usuário
-    function setUserColor() {
-        const userColor = getRandomColor();
-        document.documentElement.style.setProperty('--user-color', userColor);
-    }
-
     // Função para realizar o login
     function login() {
         name = document.getElementById('name').value; // Obtém o valor do campo de nome
-        setUserColor(); // Define a cor do usuário
         document.getElementById('nameForm').style.display = 'none'; // Oculta o formulário de nome
         document.getElementById('chatForm').style.display = 'grid'; // Exibe o formulário de chat
     }
@@ -154,6 +132,19 @@
         return time; // Retorna a hora formatada
     }
 
+    // Função para gerar uma cor aleatória em formato hexadecimal
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    // Variável para armazenar a cor do usuário atual
+    let userColor = getRandomColor();
+
     // Função para enviar uma mensagem
     function sendMessage() {
         if (document.getElementById('message').value) { // Verifica se o campo de mensagem não está vazio
@@ -161,13 +152,13 @@
             const mensagem = name + ' (' + time + '): ' + document.getElementById('message').value; // Cria a mensagem com nome, hora e conteúdo
             const p = document.createElement('p'); // Cria um novo elemento <p>
             p.innerHTML = mensagem; // Define o conteúdo do elemento como a mensagem
-            p.classList.add('user'); // Adiciona a classe 'user' ao elemento
+            p.style.color = userColor; // Define a cor do texto como a cor do usuário
             document.getElementById('messages').appendChild(p); // Adiciona o elemento ao elemento de mensagens
             socket.emit('message', mensagem); // Envia a mensagem para o servidor via Socket.IO
             document.getElementById('message').value = ''; // Limpa o campo de mensagem
         }
     }
-
+    
     // Manipulador de evento para mensagens recebidas do servidor
     socket.on('broadcast', function (message) {
         const p = document.createElement('p'); // Cria um novo elemento <p>
