@@ -1,103 +1,182 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            padding: 20px;
-        }
+    <!-- Início do cabeçalho -->
+    <!-- Importação de fontes do Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+<!-- Importação do Socket.IO -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
 
-        #messages {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 10px;
-            max-height: 400px;
-            overflow-y: scroll;
-            margin-bottom: 20px;
-        }
+<!-- Estilos CSS -->
+<style>
+    /* Estilos para o corpo do documento */
+    body {
+        font-family: 'M PLUS Rounded 1c', Arial, sans-serif; /* Define a fonte para 'M PLUS Rounded 1c', Arial, sans-serif */
+        background-color: #111; /* Define a cor de fundo como preta (#111) */
+        padding: 20px; /* Define um espaçamento de 20 pixels em torno do corpo do documento */
+    }
 
-        input[type="text"] {
-            width: 80%;
-            padding: 10px;
-            font-size: 16px;
-        }
+    /* Estilos para os títulos */
+    h1 {
+        text-align: center; /* Centraliza o texto */
+        margin-bottom: 20px; /* Define uma margem inferior de 20 pixels */
+        color: #84f; /* Define a cor do texto como azul claro (#84f) */
+        font-family: 'M PLUS Rounded 1c', sans-serif; /* Define a fonte para 'M PLUS Rounded 1c', sans-serif */
+        font-weight: 700; /* Define o peso da fonte como negrito (700) */
+        font-size: 3rem; /* Define o tamanho da fonte como 3 rem */
+    }
 
+    /* Estilos para as etiquetas */
+    label {
+        justify-self: center; /* Centraliza horizontalmente */
+        color: #84f; /* Define a cor do texto como azul claro (#84f) */
+        font-size: 1.2rem; /* Define o tamanho da fonte como 1.2 rem */
+        font-family: 'M PLUS Rounded 1c', sans-serif; /* Define a fonte para 'M PLUS Rounded 1c', sans-serif */
+    }
+
+    /* Estilos para a área de mensagens */
+    #messages {
+        width: 80vw; /* Define a largura como 80% da largura da viewport */
+        background-color: #333; /* Define a cor de fundo como cinza escuro (#333) */
+        color: #fff; /* Define a cor do texto como branco (#fff) */
+        border-radius: 8px; /* Define um raio de borda de 8 pixels */
+        padding: 10px; /* Define um espaçamento interno de 10 pixels */
+        max-height: 400px; /* Define a altura máxima como 400 pixels */
+        margin-bottom: 20px; /* Define uma margem inferior de 20 pixels */
+        overflow-y: scroll; /* Habilita a rolagem vertical */
+    }
+
+    /* Estilos para o formulário de nome */
+    #nameForm {
+        display: grid; /* Define o layout como grid */
+        justify-items: center; /* Centraliza os itens horizontalmente */
+        gap: 1rem; /* Define um espaçamento de 1 rem entre os itens */
+    }
+
+    /* Estilos para o formulário de chat */
+    #chatForm {
+        justify-items: center; /* Centraliza os itens horizontalmente */
+        gap: 1rem; /* Define um espaçamento de 1 rem entre os itens */
+    }
+
+    /* Estilos para o campo de nome */
+    #name {
+        width: 300px; /* Define a largura como 300 pixels */
+        padding: 10px; /* Define um espaçamento interno de 10 pixels */
+        font-size: 16px; /* Define o tamanho da fonte como 16 pixels */
+    }
+
+    /* Estilos para campos de texto */
+    input[type="text"] {
+        width: 80vw; /* Define a largura como 80% da largura da viewport */
+        padding: 10px; /* Define um espaçamento interno de 10 pixels */
+        font-size: 16px; /* Define o tamanho da fonte como 16 pixels */
+        background-color: #333; /* Define a cor de fundo como cinza escuro (#333) */
+        color: #fff; /* Define a cor do texto como branco (#fff) */
+        border-radius: 8px; /* Define um raio de borda de 8 pixels */
+        margin-bottom: 20px; /* Define uma margem inferior de 20 pixels */
+        border: none; /* Remove a borda */
+    }
+
+    /* Estilos para botões */
+    button {
+        display: block; /* Define como bloco */
+        justify-self: center; /* Centraliza horizontalmente */
+        border-radius: 4px; /* Define um raio de borda de 4 pixels */
+        padding: 10px 20px; /* Define um espaçamento interno de 10 pixels na vertical e 20 pixels na horizontal */
+        font-size: 16px; /* Define o tamanho da fonte como 16 pixels */
+        background-color: #84f; /* Define a cor de fundo como azul claro (#84f) */
+        color: #fff; /* Define a cor do texto como branco (#fff) */
+        border: none; /* Remove a borda */
+        cursor: pointer; /* Altera o cursor do mouse para um ponteiro */
+    }
+
+    /* Estilos para o botão ao passar o mouse */
+    button:hover {
+        background-color: #84c; /* Define a cor de fundo como azul médio (#84c) */
+    }
+
+    /* Estilos responsivos para telas menores */
+    @media (max-width: 768px) {
+
+        input[type="text"],
         button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            cursor: pointer;
+            width: 100%; /* Define a largura como 100% da largura da viewport */
         }
+    }
+</style>
 
-        button:hover {
-            background-color: #45a049;
+<!-- Scripts JavaScript -->
+<script>
+    // Conexão com o servidor do Socket.IO
+    const socket = io('https://chat-app-host.onrender.com', { transports: ['websocket'] });
+    
+    let name = ''; // Variável para armazenar o nome do usuário
+
+    // Função para realizar o login
+    function login() {
+        name = document.getElementById('name').value; // Obtém o valor do campo de nome
+        document.getElementById('nameForm').style.display = 'none'; // Oculta o formulário de nome
+        document.getElementById('chatForm').style.display = 'grid'; // Exibe o formulário de chat
+    }
+
+    // Função para obter a hora atual
+    function getCurrentTime() {
+        const now = new Date(); // Obtém a data e hora atual
+        const hours = String(now.getHours()).padStart(2, '0'); // Obtém as horas e adiciona um zero à esquerda se necessário
+        const minutes = String(now.getMinutes()).padStart(2, '0'); // Obtém os minutos e adiciona um zero à esquerda se necessário
+        const time = hours + ':' + minutes; // Formata a hora como "HH:MM"
+        return time; // Retorna a hora formatada
+    }
+
+    // Função para enviar uma mensagem
+    function sendMessage() {
+        if (document.getElementById('message').value) { // Verifica se o campo de mensagem não está vazio
+            const time = getCurrentTime(); // Obtém a hora atual
+            const mensagem = name + ' (' + time + '): ' + document.getElementById('message').value; // Cria a mensagem com nome, hora e conteúdo
+            const p = document.createElement('p'); // Cria um novo elemento <p>
+            p.innerHTML = mensagem; // Define o conteúdo do elemento como a mensagem
+            document.getElementById('messages').appendChild(p); // Adiciona o elemento ao elemento de mensagens
+            socket.emit('message', mensagem); // Envia a mensagem para o servidor via Socket.IO
+            document.getElementById('message').value = ''; // Limpa o campo de mensagem
         }
+    }
 
-        /* Estilos Responsivos */
+    // Manipulador de evento para mensagens recebidas do servidor
+    socket.on('broadcast', function (message) {
+        const p = document.createElement('p'); // Cria um novo elemento <p>
+        p.innerHTML = message; // Define o conteúdo do elemento como a mensagem recebida
+        document.getElementById('messages').appendChild(p); // Adiciona o elemento ao elemento de mensagens
+    });
 
-        @media (max-width: 768px) {
-            input[type="text"], button {
-                width: 100%;
-            }
-        }
-    </style>
-    <script>
-        const socket = io('https://chat-multi-users.onrender.com/', { transports: ['websocket'] });
-        let name = '';
-
-        function login() {
-            name = document.getElementById('name').value;
-            document.getElementById('nameForm').style.display = 'none';
-            document.getElementById('chatForm').style.display = 'block';
-        }
-
-        function getCurrentTime() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const time = hours + ':' + minutes;
-            return time;
-        }
-
-        function sendMessage() {
-            if (document.getElementById('message').value) {
-                const time = getCurrentTime();
-                const mensagem = name + ' (' + time + '): ' + document.getElementById('message').value;
-                const p = document.createElement('p');
-                p.innerHTML = mensagem;
-                document.getElementById('messages').appendChild(p);
-                socket.emit('message', mensagem);
-                document.getElementById('message').value = '';
-            }
-        }
-
-        socket.on('broadcast', function (message) {
-            const p = document.createElement('p');
-            p.innerHTML = message;
-            document.getElementById('messages').appendChild(p);
-        });
-    </script>
+    // Manipulador de evento para pressionar a tecla Enter
+    document.addEventListener('keydown', function (event) {
+        if (event.keyCode !== 13) return; // Verifica se a tecla pressionada não é a tecla Enter
+        login(); // Realiza o login
+        sendMessage(); // Envia a mensagem
+    })
+</script>
 </head>
 <body>
-    <h1>Chat Multi Usuário</h1>
-    <div id="nameForm">
-        <label for="name">Digite seu nome:</label>
-        <input type="text" id="name" />
-        <button onclick="login()">Entrar</button>
-    </div>
-    <div id="chatForm" style="display: none;">
-        <div id="messages"></div>
-        <input type="text" id="message" placeholder="Digite sua mensagem..." />
-        <button onclick="sendMessage()">Enviar</button>
-    </div>
+    <!-- Corpo do documento -->
+<h1>MuuS Chat</h1> <!-- Título do chat -->
+
+<!-- Formulário para inserir o nome do usuário -->
+<div id="nameForm">
+    <label for="name">Digite seu nome:</label> <!-- Etiqueta para o campo de nome -->
+    <input type="text" id="name" /> <!-- Campo de entrada para o nome do usuário -->
+    <button onclick="login()">Entrar</button> <!-- Botão para realizar o login -->
+</div>
+
+<!-- Formulário principal do chat -->
+<div id="chatForm" style="display: none;"> <!-- Define o formulário como oculto inicialmente -->
+    <div id="messages"></div> <!-- Área onde as mensagens serão exibidas -->
+    <input type="text" id="message" placeholder="Digite sua mensagem..." /> <!-- Campo de entrada para a mensagem -->
+    <button onclick="sendMessage()" , onkeydown="sendMessage()">Enviar</button> <!-- Botão para enviar a mensagem -->
+</div>
 </body>
 </html>
