@@ -132,14 +132,25 @@
         return time; // Retorna a hora formatada
     }
 
-    // Função para gerar uma cor aleatória em formato hexadecimal
+    // Função para gerar uma cor aleatória clara
     function getRandomColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
+        const luminanceThreshold = 0.6; // Limiar de luminosidade para cores claras
+        let color;
+        do {
+            color = '#' + Math.floor(Math.random() * 16777215).toString(16); // Gera uma cor hexadecimal aleatória
+        } while (getLuminance(color) < luminanceThreshold); // Verifica se a cor tem uma luminosidade suficiente
+
         return color;
+    }
+
+    // Função para calcular a luminosidade de uma cor
+    function getLuminance(color) {
+        const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+        const r = parseInt(rgb[1], 16);
+        const g = parseInt(rgb[2], 16);
+        const b = parseInt(rgb[3], 16);
+
+        return (r * 0.299 + g * 0.587 + b * 0.114) / 255; // Fórmula para calcular a luminosidade
     }
 
     // Variável para armazenar a cor do usuário atual
@@ -149,18 +160,18 @@
     function sendMessage() {
         if (document.getElementById('message').value) { // Verifica se o campo de mensagem não está vazio
             const time = getCurrentTime(); // Obtém a hora atual
-            const mensagem = {
+            const message = {
                 name: name,
                 color: userColor,
                 content: document.getElementById('message').value
             }; // Cria o objeto mensagem com nome, cor e conteúdo
 
             const p = document.createElement('p'); // Cria um novo elemento <p>
-            p.innerHTML = mensagem.name + ' (' + time + '): ' + mensagem.content; // Define o conteúdo do elemento como a mensagem formatada
-            p.style.color = mensagem.color; // Define a cor do texto como a cor do usuário
+            p.innerHTML = message.name + ' (' + time + '): ' + message.content; // Define o conteúdo do elemento como a mensagem formatada
+            p.style.color = message.color; // Define a cor do texto como a cor do usuário
             document.getElementById('messages').appendChild(p); // Adiciona o elemento ao elemento de mensagens
 
-            socket.emit('message', mensagem); // Envia a mensagem para o servidor via Socket.IO
+            socket.emit('message', message); // Envia a mensagem para o servidor via Socket.IO
             document.getElementById('message').value = ''; // Limpa o campo de mensagem
         }
     }
