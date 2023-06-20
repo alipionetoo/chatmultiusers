@@ -107,13 +107,32 @@
         button {
             width: 100%; /* Define a largura como 100% da largura da viewport */
         }
+    /* Estilos para as etiquetas */
+    label {
+        justify-self: center; /* Centraliza horizontalmente */
+        color: var(--user-color); /* Define a cor do texto como a cor do usuário */
+        font-size: 1.2rem; /* Define o tamanho da fonte como 1.2 rem */
+        font-family: 'M PLUS Rounded 1c', sans-serif; /* Define a fonte para 'M PLUS Rounded 1c', sans-serif */
+        }
+
     }
 </style>
 
 <!-- Scripts JavaScript -->
+<!-- Scripts JavaScript -->
 <script>
-    // Conexão com o servidor do Socket.IO (colocar o endereço URL da hospedagem abaixo)
-    const socket = io('https://chat-multi-users.onrender.com', { transports: ['websocket'] });
+    // Função para gerar uma cor aleatória
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    // Conexão com o servidor do Socket.IO (colocar a URL da hospedagem abaixo)
+    const socket = io('https://chat-multi-users.onrender.com/', { transports: ['websocket'] });
     
     let name = ''; // Variável para armazenar o nome do usuário
 
@@ -122,6 +141,9 @@
         name = document.getElementById('name').value; // Obtém o valor do campo de nome
         document.getElementById('nameForm').style.display = 'none'; // Oculta o formulário de nome
         document.getElementById('chatForm').style.display = 'grid'; // Exibe o formulário de chat
+
+        const userColor = getRandomColor(); // Obtém uma cor aleatória para o usuário
+        document.documentElement.style.setProperty('--user-color', userColor); // Define a cor do usuário no CSS
     }
 
     // Função para obter a hora atual
